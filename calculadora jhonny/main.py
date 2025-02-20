@@ -3,6 +3,9 @@ from tkinter import ttk, messagebox
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 import math
+from tkinter import font
+import os
+import sys
 
 # Funciones para calcular los modelos de colas
 def calcular_sin_limite_cola(lambda_, mu):
@@ -86,39 +89,61 @@ class CalculadoraColas(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Calculadora de Modelos de Colas")
-        self.geometry("800x600")
-        self.configure(bg="#f0f0f0")
-        
+        self.geometry("1000x600")  # Tamaño inicial fijo
+        self.configure(bg="#2C2F33")
+
+        # Centrar la ventana en la pantalla
+        self.center_window(1000, 600)
+
+        # Ruta de la fuente local (relativa a la carpeta del script)
+        fuente_path = os.path.join(os.path.dirname(__file__), "resources", "PressStart2P-Regular.ttf")
+
+        # Cargar la fuente en Tkinter
+        if os.path.exists(fuente_path):
+            self.custom_font = font.Font(family="Press Start 2P", size=12)
+            self.option_add("*Font", self.custom_font)  # Aplicar a todos los widgets por defecto
+        else:
+            print("⚠️ No se encontró la fuente. Usando fuente predeterminada.")
+            self.custom_font = font.nametofont("TkDefaultFont")
+
         # Estilos personalizados
         self.style = ttk.Style()
         self.style.theme_use("clam")  # Tema moderno
-        self.style.configure("TFrame", background="#f0f0f0")
-        self.style.configure("TLabel", background="#f0f0f0", font=("Arial", 12), foreground="#333")
-        self.style.configure("TButton", font=("Arial", 12), padding=10, background="#4CAF50", foreground="white")
-        self.style.map("TButton", background=[("active", "#45a049")])
-        self.style.configure("TEntry", font=("Arial", 12), padding=5)
-        
-        # Frame principal
+        self.style.configure("TFrame", background="#2C2F33")
+        self.style.configure("TLabel", background="#2C2F33", font=self.custom_font, foreground="#36d500")
+        self.style.configure("TButton", font=self.custom_font, padding=10, background="#289e00", foreground="#FFF")
+        self.style.map("TButton", background=[("active", "#289e00")])
+        self.style.configure("TEntry", font=self.custom_font, padding=5)
+
+        # Frame principal (contenedor centrado)
         self.main_frame = ttk.Frame(self)
-        self.main_frame.pack(pady=20, padx=20, fill="both", expand=True)
-        
+        self.main_frame.pack(expand=True)  # Hace que el frame se mantenga centrado
+
         # Selección de modelo
         self.label_modelo = ttk.Label(self.main_frame, text="Selecciona el modelo de colas:")
         self.label_modelo.grid(row=0, column=0, columnspan=2, pady=10)
-        
+
         self.boton_sin_limite = ttk.Button(self.main_frame, text="Sin límite en cola", command=self.abrir_sin_limite)
         self.boton_sin_limite.grid(row=1, column=0, padx=10, pady=10)
-        
+
         self.boton_con_limite = ttk.Button(self.main_frame, text="Con límite en cola", command=self.abrir_con_limite)
         self.boton_con_limite.grid(row=1, column=1, padx=10, pady=10)
-    
+
     def abrir_sin_limite(self):
         self.withdraw()  # Oculta la ventana principal
         VentanaSinLimite(self)
-    
+
     def abrir_con_limite(self):
         self.withdraw()  # Oculta la ventana principal
         VentanaConLimite(self)
+
+    def center_window(self, width, height):
+        """Centrar la ventana en la pantalla con un tamaño específico."""
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+        x = (screen_width // 2) - (width // 2)
+        y = (screen_height // 2) - (height // 2)
+        self.geometry(f"{width}x{height}+{x}+{y}")  # Aplica la nueva posición centrada
 
 class VentanaSinLimite(tk.Toplevel):
     def __init__(self, parent):
@@ -128,7 +153,7 @@ class VentanaSinLimite(tk.Toplevel):
         self.configure(bg="#f0f0f0")
         
         # Frame principal con barra de desplazamiento
-        self.canvas = tk.Canvas(self, bg="#f0f0f0")
+        self.canvas = tk.Canvas(self, bg="#2C2F33")
         self.scrollbar = ttk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
         self.scrollable_frame = ttk.Frame(self.canvas)
         
