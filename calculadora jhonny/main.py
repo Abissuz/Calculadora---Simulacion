@@ -9,32 +9,35 @@ import sys
 
 # Funciones para calcular los modelos de colas
 def calcular_sin_limite_cola(lambda_, mu):
-    rho = lambda_ / mu
-    Po = 1 - rho
-    Ls = lambda_ / (mu - lambda_)
-    Lq = Ls - rho
-    Ws = Ls / lambda_
-    Wq = Lq / lambda_
-    lambda_efectiva = lambda_
-    
-    # Distribución de probabilidad
-    n = 10  # Número de estados a considerar
-    probabilidades_absolutas = [Po * (rho ** i) for i in range(n)]
-    probabilidades_acumuladas = [sum(probabilidades_absolutas[:i+1]) for i in range(n)]
-    
-    return {
-        "lambda": lambda_,
-        "mu": mu,
-        "rho": rho,
-        "Po": Po,
-        "Ls": Ls,
-        "Lq": Lq,
-        "Ws": Ws,
-        "Wq": Wq,
-        "lambda_efectiva": lambda_efectiva,
-        "probabilidades_absolutas": probabilidades_absolutas,
-        "probabilidades_acumuladas": probabilidades_acumuladas
-    }
+    if (mu > lambda_):
+        rho = lambda_ / mu
+        Po = 1 - rho
+        Ls = lambda_ / (mu - lambda_)
+        Lq = Ls - rho
+        Ws = Ls / lambda_
+        Wq = Lq / lambda_
+        lambda_efectiva = lambda_
+        
+        # Distribución de probabilidad
+        n = 10  # Número de estados a considerar
+        probabilidades_absolutas = [Po * (rho ** i) for i in range(n)]
+        probabilidades_acumuladas = [sum(probabilidades_absolutas[:i+1]) for i in range(n)]
+        
+        return {
+            "lambda": lambda_,
+            "mu": mu,
+            "rho": rho,
+            "Po": Po,
+            "Ls": Ls,
+            "Lq": Lq,
+            "Ws": Ws,
+            "Wq": Wq,
+            "lambda_efectiva": lambda_efectiva,
+            "probabilidades_absolutas": probabilidades_absolutas,
+            "probabilidades_acumuladas": probabilidades_acumuladas
+        }
+    else:
+        messagebox.showerror("Critical Error","mu (μ) tiene que ser mayor que lambda (λ)")
 
 def calcular_con_limite_cola(lambda_, mu, N):
     rho = lambda_ / mu
@@ -283,10 +286,10 @@ class VentanaConLimite(tk.Toplevel):
         super().__init__(parent)
         self.title("Modelo con límite en cola")
         self.geometry("800x600")
-        self.configure(bg="#f0f0f0")
+        self.configure(bg="#2C2F33")
         
         # Frame principal con barra de desplazamiento
-        self.canvas = tk.Canvas(self, bg="#f0f0f0")
+        self.canvas = tk.Canvas(self, bg="#2C2F33")
         self.scrollbar = ttk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
         self.scrollable_frame = ttk.Frame(self.canvas)
         
