@@ -12,7 +12,11 @@ from datetime import datetime  # Para generar nombres únicos de archivos
 
 # Funciones para calcular los modelos de colas
 def calcular_sin_limite_cola(lambda_, mu):
+<<<<<<< HEAD
     if mu > lambda_:
+=======
+    if (mu > lambda_):
+>>>>>>> 68175029abe7dfea7334c4cde496a835b40e8a03
         rho = lambda_ / mu
         Po = 1 - rho
         Ls = lambda_ / (mu - lambda_)
@@ -20,6 +24,7 @@ def calcular_sin_limite_cola(lambda_, mu):
         Ws = Ls / lambda_
         Wq = Lq / lambda_
         lambda_efectiva = lambda_
+<<<<<<< HEAD
 
         # Distribución de probabilidad
         n = 0
@@ -34,6 +39,14 @@ def calcular_sin_limite_cola(lambda_, mu):
                 break
             n += 1
 
+=======
+        
+        # Distribución de probabilidad
+        n = 10  # Número de estados a considerar
+        probabilidades_absolutas = [Po * (rho ** i) for i in range(n)]
+        probabilidades_acumuladas = [sum(probabilidades_absolutas[:i+1]) for i in range(n)]
+        
+>>>>>>> 68175029abe7dfea7334c4cde496a835b40e8a03
         return {
             "lambda": lambda_,
             "mu": mu,
@@ -48,7 +61,11 @@ def calcular_sin_limite_cola(lambda_, mu):
             "probabilidades_acumuladas": probabilidades_acumuladas
         }
     else:
+<<<<<<< HEAD
         messagebox.showerror("Critical Error", "mu (μ) tiene que ser mayor que lambda (λ)")
+=======
+        messagebox.showerror("Critical Error","mu (μ) tiene que ser mayor que lambda (λ)")
+>>>>>>> 68175029abe7dfea7334c4cde496a835b40e8a03
 
 def calcular_con_limite_cola(lambda_, mu, N):
     rho = lambda_ / mu
@@ -345,7 +362,11 @@ class VentanaConLimite(tk.Toplevel):
         self.title("Modelo con límite en cola")
         self.geometry("800x600")
         self.configure(bg="#2C2F33")
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 68175029abe7dfea7334c4cde496a835b40e8a03
         # Frame principal con barra de desplazamiento
         self.canvas = tk.Canvas(self, bg="#2C2F33")
         self.scrollbar = ttk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
