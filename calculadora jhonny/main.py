@@ -8,7 +8,7 @@ import math
 from tkinter import font
 import os
 import sys
-from datetime import datetime  # Importar datetime para generar nombres únicos
+from datetime import datetime  # Para generar nombres únicos de archivos
 
 # Funciones para calcular los modelos de colas
 def calcular_sin_limite_cola(lambda_, mu):
@@ -103,7 +103,8 @@ def generar_reporte(resultados):
         ["Número esperado en el sistema (L)", f"{resultados['Ls']:.4f}"],
         ["Número esperado en la cola (Lq)", f"{resultados['Lq']:.4f}"],
         ["Tiempo esperado en el sistema (W)", f"{resultados['Ws']:.4f}"],
-        ["Tiempo esperado en la cola (Wq)", f"{resultados['Wq']:.4f}"]
+        ["Tiempo esperado en la cola (Wq)", f"{resultados['Wq']:.4f}"],
+        ["Tasa de llegada efectiva (λ_efectiva)", f"{resultados['lambda_efectiva']:.4f}"]  # Nueva línea
     ]
 
     # Crear tabla de datos generales
@@ -450,20 +451,21 @@ class VentanaConLimite(tk.Toplevel):
         ttk.Label(self.resultados_frame, text=f"Número esperado en la cola (Lq): {self.resultados['Lq']:.4f}").grid(row=6, column=0, sticky="w", padx=10, pady=5)
         ttk.Label(self.resultados_frame, text=f"Tiempo esperado en el sistema (W): {self.resultados['Ws']:.4f}").grid(row=7, column=0, sticky="w", padx=10, pady=5)
         ttk.Label(self.resultados_frame, text=f"Tiempo esperado en la cola (Wq): {self.resultados['Wq']:.4f}").grid(row=8, column=0, sticky="w", padx=10, pady=5)
+        ttk.Label(self.resultados_frame, text=f"Tasa de llegada efectiva (λ_efectiva): {self.resultados['lambda_efectiva']:.4f}").grid(row=9, column=0, sticky="w", padx=10, pady=5)  # Nueva línea
 
         # Mostrar distribución de probabilidad
-        ttk.Label(self.resultados_frame, text="Distribución de Probabilidad", font=("Arial", 14, "bold")).grid(row=9, column=0, columnspan=2, pady=10)
+        ttk.Label(self.resultados_frame, text="Distribución de Probabilidad", font=("Arial", 14, "bold")).grid(row=10, column=0, columnspan=2, pady=10)
 
         # Crear Treeview para la tabla
         self.tree = ttk.Treeview(self.resultados_frame, columns=("Estado", "P(n)", "P(Acum)"), show="headings")
         self.tree.heading("Estado", text="Estado")
         self.tree.heading("P(n)", text="P(n)")
         self.tree.heading("P(Acum)", text="P(Acum)")
-        self.tree.grid(row=10, column=0, columnspan=2, padx=10, pady=10)
+        self.tree.grid(row=11, column=0, columnspan=2, padx=10, pady=10)
 
         # Agregar barra de desplazamiento
         scrollbar = ttk.Scrollbar(self.resultados_frame, orient="vertical", command=self.tree.yview)
-        scrollbar.grid(row=10, column=2, sticky="ns")
+        scrollbar.grid(row=11, column=2, sticky="ns")
         self.tree.configure(yscrollcommand=scrollbar.set)
 
         # Llenar la tabla con los datos
